@@ -24,6 +24,7 @@ $sql= mysqli_query($conn,"SELECT * FROM data_barang")
                 <th scope="col">qty jual</th>
                 <th scope="col">qty akhir</th>
                 <th scope="col">gambar</th>
+                <th scope="col"></th>
                 <th scope="col">action</th>
              </tr>
         </thead>
@@ -44,7 +45,9 @@ $sql= mysqli_query($conn,"SELECT * FROM data_barang")
                     <td>{$row['qty_beli']}</td>
                     <td>{$row['qty_jual']}</td>
                     <td>{$row['qty_akhir']}</td>
-                    <td>{$row['gambar']}</td>
+                    <td>
+                        <img src=\"../images/".$row['gambar'].".\" style='width='50' height='25'></img>                   
+                    <td>
                     <td>
                     <a class='bi bi-pencil-square' href='?page=product-ubah&id={$row['id']}'></a>
                     <a class='bi bi-trash' href='?page=product-hapus&id={$row['id']}'></a>
