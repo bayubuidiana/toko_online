@@ -1,25 +1,56 @@
 <?php 
 include("../config.php");
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $kode_barang = $_POST['kode_barang'];
+if (isset($_POST['submit'])) {
+    $kode = $_POST['kode_barang'];
     $nama_barang = $_POST['nama_barang'];
     $jenis = $_POST['jenis'];
     $harga_beli = $_POST['harga_beli'];
     $harga_jual = $_POST['harga_jual'];
     $qty_awal = $_POST['qty_awal'];
-    $qty_beli = $_POST['qty_beli'];
+    $qty_beli = $_POST['qty__beli'];
     $qty_jual = $_POST['qty_jual'];
     $qty_akhir = $_POST['qty_akhir'];
 
-    $sql = "INSERT INTO data_barang (Kode_Barang, Nama_Barang, Jenis, Harga_Beli, Harga_Jual, Qty_Awal, Qty_Beli, Qty_jual, Qty_akhir) 
-    VALUES ('$kode_barang', '$nama_barang','$jenis', '$harga_beli', '$harga_jual', '$qty_awal', '$qty_beli', '$qty_jual', '$qty_akhir')";
 
-    // Eksekusi query
-    if ($conn->query($sql) === TRUE) {
-        echo "Data berhasil ditambahkan.";
+    $sql ="INSERT INTO data_barang VALUES (
+         '$kode_barang',
+         '$nama_barang',
+         '$jenis',
+         '$harga_beli',
+         '$harga_jual',
+         '$qty_awal',
+         '$qty_beli',
+         '$qty_jual',
+         '$qty_akhir',
+         '',
+    )";
+
+    mysqli_query($conn, $query);
+
+    $ekstensi_diperbolehkan    = array('png', 'jpg');
+    $nama = $_FILES['photo']['name'];
+    $x = explode('.', $nama);
+
+    $ekstensi = strtolower(end($x));
+    $ukuran    = $_FILES['photo']['size'];
+    $file_tmp = $_FILES['photo']['tmp_name'];
+    $namaBaru = bin2hex(random_bytes(20)) . "." . $ekstensi;
+
+    if (in_array($ekstensi, $ekstensi_diperbolehkan) === true) {
+        if ($ukuran < 10440700) {
+            move_uploaded_file($file_tmp, '../images/' . $namaBaru);
+            $sql = mysqli_query($conn, "UPDATE data_barang SET gambar = '$namaBaru' WHERE kode = '$kode'");
+            if ($query2) {
+                header("Location:?page=products");
+            } else {
+                echo 'GAGAL MENGUPLOAD GAMBAR';
+            }
+        } else {
+            echo 'UKURAN FILE TERLALU BESAR';
+        }
     } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        echo 'EKSTENSI FILE YANG DI UPLOAD TIDAK DI PERBOLEHKAN';
     }
 }
 ?>
@@ -79,6 +110,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <label for="qtyakhir" class="col-sm-2 col-form-label">Qty Akhir</label>
         <div class="col-sm-10">
             <input type="number" class="form-control" id="qty_akhir" name="qty_akhir" required>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label for="photo" class="col-sm-2 col-form-label">Product Image</label>
+        <div class="col-sm-10">
+            <input type="file" class="form-control" id="photo" name="photo">
         </div>
     </div>
     <div class="row mb-3">

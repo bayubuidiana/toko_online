@@ -123,6 +123,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         </div>
     </div>
     <div class="row mb-3">
+        <label for="photo" class="col-sm-2 col-form-label">Product Image</label>
+        <div class="col-sm-10">
+            <input type="file" class="form-control" id="photo" name="photo">
+        </div>
+    </div>
+    <div class="row mb-3">
         <button type="submit" class="btn btn-primary">Update</button>
     </div>
 </form>
